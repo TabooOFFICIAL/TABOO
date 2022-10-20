@@ -1,7 +1,3 @@
-/**
- *Submitted for verification at BscScan.com on 2021-05-18
-*/
-
 // SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.2;
@@ -456,7 +452,7 @@ contract CoinToken is Context, IBEP20, Ownable {
     string  private _NAME;
     string  private _SYMBOL;
     uint256   private _DECIMALS;
-	address public FeeAddress;
+    address public FeeAddress;
    
     uint256 private _MAX = ~uint256(0);
     uint256 private _DECIMALFACTOR;
@@ -478,23 +474,23 @@ contract CoinToken is Context, IBEP20, Ownable {
     uint256 private ORIG_BURN_FEE;
     uint256 private ORIG_CHARITY_FEE;
 
-    constructor (string memory _name, string memory _symbol, uint256 _decimals, uint256 _supply, uint256 _txFee,uint256 _burnFee,uint256 _charityFee,address _FeeAddress,address tokenOwner)  {
-		_NAME = _name;
-		_SYMBOL = _symbol;
-		_DECIMALS = _decimals;
-		_DECIMALFACTOR = 10 ** _DECIMALS;
-		_tTotal =_supply * _DECIMALFACTOR;
-		_rTotal = (_MAX - (_MAX % _tTotal));
-		_TAX_FEE = _txFee* 100; 
-        _BURN_FEE = _burnFee * 100;
-		_CHARITY_FEE = _charityFee* 100;
-		ORIG_TAX_FEE = _TAX_FEE;
-		ORIG_BURN_FEE = _BURN_FEE;
-		ORIG_CHARITY_FEE = _CHARITY_FEE;
-		FeeAddress = _FeeAddress;
-		_owner = tokenOwner;
-        _rOwned[tokenOwner] = _rTotal;
-        emit Transfer(address(0),tokenOwner, _tTotal);
+    constructor ()  {
+	_NAME = "TABOO TOKEN";
+	_SYMBOL = "TABOO";
+	_DECIMALS = 9;
+	_DECIMALFACTOR = 10 ** _DECIMALS;
+	_tTotal = 10000000000 * _DECIMALFACTOR;
+	_rTotal = (_MAX - (_MAX % _tTotal));
+	_TAX_FEE = 0;
+        _CHARITY_FEE = 0;
+        _BURN_FEE = 1 * 100;
+	ORIG_TAX_FEE = _TAX_FEE;
+	ORIG_BURN_FEE = _BURN_FEE;
+	ORIG_CHARITY_FEE = _CHARITY_FEE;
+	FeeAddress = address(0);
+	_owner = _msgSender();
+        _rOwned[_msgSender()] = _rTotal;
+        emit Transfer(address(0),_msgSender(), _tTotal);
     }
 
     function name() public view returns (string memory) {
@@ -620,8 +616,8 @@ contract CoinToken is Context, IBEP20, Ownable {
 	
 	function updateFee(uint256 _txFee,uint256 _burnFee,uint256 _charityFee) onlyOwner() public{
 		require(_txFee < 100 && _burnFee < 100 && _charityFee < 100);
-        _TAX_FEE = _txFee* 100; 
-        _BURN_FEE = _burnFee * 100;
+        	_TAX_FEE = _txFee* 100; 
+        	_BURN_FEE = _burnFee * 100;
 		_CHARITY_FEE = _charityFee* 100;
 		ORIG_TAX_FEE = _TAX_FEE;
 		ORIG_BURN_FEE = _BURN_FEE;
